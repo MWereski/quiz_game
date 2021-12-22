@@ -1,0 +1,22 @@
+{
+  "name": "milionerzy",
+  "version": "1.0.0",
+  "description": "Quiz game in express and node.js\r Milionerzy",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MWereski/quiz_game.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MWereski/quiz_game/issues"
+  },
+  "homepage": "https://github.com/MWereski/quiz_game#readme",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}
