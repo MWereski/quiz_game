@@ -10,6 +10,12 @@ function fillQuestionElements(data){
         return;
     }
 
+    if(data.looser === true){
+        gameBoard.style.display = 'none';
+        h2.innerText = 'Przegrałeś! Spróbuj ponownie! ';
+        return;
+    }
+
     question.innerText = data.question;
 
     for(const i in data.answers){
@@ -33,6 +39,7 @@ function showNextQuestion(){
 
 showNextQuestion();
 const goodAnswerSpan = document.querySelector('#goodAnswer');
+
 function handleAnswerFeedback(data){
 
     goodAnswerSpan.innerText = data.goodAnswer;
@@ -48,7 +55,7 @@ function sendAnswer(answerIndex){
         });
 }
 
-const buttons = document.querySelectorAll('button');
+const buttons = document.querySelectorAll('.answer-button');
 for(const button of buttons){
     button.addEventListener('click', (event) => {
 
@@ -57,3 +64,68 @@ for(const button of buttons){
 
     })
 }
+const tipDiv = document.querySelector('#tip');
+
+function  handleFriendAnswer(data){
+    tipDiv.innerText = data.text;
+}
+function callToAFriend(){
+    //callToFriend
+    fetch(`/help/friend`, {
+        method: 'GET',
+    })
+        .then(r => r.json())
+        .then(data =>{
+            handleFriendAnswer(data);
+        });
+}
+
+function  handlehalfOnHalfAnswer(data){
+    
+    if(typeof data.text === 'string'){
+        tipDiv.innerText = data.text;
+    }else{
+        for(const button of buttons){
+            if(data.answerToRemove.indexOf(button.innerText) > -1){
+                button.innerText = ''
+            }
+        }
+    }
+
+}
+function halfOnHalf(){
+    //callToFriend
+    fetch(`/help/half`, {
+        method: 'GET',
+    })
+        .then(r => r.json())
+        .then(data =>{
+            handlehalfOnHalfAnswer(data);
+        });
+}
+
+function  handlequestionToTheCrowdAnswer(data){
+
+    if(typeof data.text === 'string'){
+        tipDiv.innerText = data.text;
+    }else{
+        data.chart.forEach((percent, index) => {
+            buttons[index].innerText = `${buttons[index].innerText}: ${percent}%`
+        });
+    }
+
+}
+function questionToTheCrowd(){
+    //callToFriend
+    fetch(`/help/crowd`, {
+        method: 'GET',
+    })
+        .then(r => r.json())
+        .then(data =>{
+            handlequestionToTheCrowdAnswer(data);
+        });
+}
+
+document.querySelector('#questionToTheCrowd').addEventListener('click', questionToTheCrowd);
+document.querySelector('#halfOnHalf').addEventListener('click', halfOnHalf);
+document.querySelector('#callToFriend').addEventListener('click', callToAFriend);
